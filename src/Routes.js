@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import Client from './Components/Client';
 import Home from './Components/Home';
 import SiteList from './Components/SiteList';
+import { SiteListProvider } from './Contexts/siteListContext';
 
 const Routes = () => {
   return (
@@ -13,7 +14,9 @@ const Routes = () => {
           <Client />
         </Route>
         <Route path="/sites">
-          <SiteList />
+          <SiteListProvider>
+            <SiteList />
+          </SiteListProvider>
         </Route>
         <Route path="/">
           <Home />
