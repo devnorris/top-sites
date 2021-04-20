@@ -10,9 +10,7 @@ const Routes = () => {
   return (
     <div>
       <Switch>
-        <Route path="/sites/:client">
-          <Client />
-        </Route>
+        <Route path="/sites/:client" render={props => <Client {...props} />} />
         <Route path="/sites">
           <SiteListProvider>
             <SiteList />

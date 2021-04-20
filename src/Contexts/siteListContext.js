@@ -6,18 +6,23 @@ const SiteListDispatchContext = createContext();
 const FETCH_SITE_LIST = 'FETCH_SITE_LIST';
 const SITE_LIST_ERROR = 'SITE_LIST_ERROR';
 const SAVE_SITE_LIST = 'SAVE_SITE_LIST';
+const UPDATE_PAGE = 'UPDATE_PAGE';
 
 const initialState = {
   status: 'idle',
   error: null,
-  siteList: []
+  siteList: [],
+  page: 1
 };
 
 /*
     This is our reducer that will store and handle any
     changes to our SITE LIST state.
 */
-function SiteListReducer(state = initialState, { type, error, siteList }) {
+function SiteListReducer(
+  state = initialState,
+  { type, error, siteList, page }
+) {
   switch (type) {
     case FETCH_SITE_LIST: {
       return {
@@ -39,6 +44,12 @@ function SiteListReducer(state = initialState, { type, error, siteList }) {
         siteList: state.siteList.concat(siteList)
       };
     }
+    case UPDATE_PAGE: {
+      return {
+        ...state,
+        page: page
+      };
+    }
 
     default: {
       throw new Error(`Action not handled for SiteListContext ${type}`);
@@ -51,11 +62,18 @@ function SiteListProvider({ children }) {
 
   useEffect(() => {
     fetchSiteList({ dispatch });
-    fetch('test')
+    fetch(
+      `http://localhost:3000/sites?_page=${
+        state.page ? state.page : initialState.page
+      }`
+    )
       .then(res => res.json())
-      .then(data => console.log(data))
-      .catch(error => siteListError({ dispatch, error: 'FAILED' }));
-  }, []);
+      .then(data => saveSiteList({ dispatch, siteList: data }))
+      .catch(error => {
+        console.log('error', error);
+        siteListError({ dispatch, error: 'FAILED' });
+      });
+  }, [state.page]);
 
   return (
     <SiteListStateContext.Provider value={state}>
@@ -91,7 +109,6 @@ export const fetchSiteList = ({ dispatch }) => {
 };
 
 export const siteListError = ({ dispatch, error }) => {
-  console.log(error);
   dispatch({
     type: SITE_LIST_ERROR,
     error
@@ -102,6 +119,13 @@ export const saveSiteList = ({ dispatch, siteList }) => {
   dispatch({
     type: SAVE_SITE_LIST,
     siteList
+  });
+};
+
+export const updatePage = ({ dispatch, page }) => {
+  dispatch({
+    type: UPDATE_PAGE,
+    page
   });
 };
 
