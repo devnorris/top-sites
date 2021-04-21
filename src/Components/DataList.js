@@ -36,9 +36,9 @@ const DataList = ({ path }) => {
   return (
     <div>
       <NavBar title={title} />
-      <StyledList>
+      <div style={{ padding: '10px 20px' }}>
         <Filters options={filters} />
-      </StyledList>
+      </div>
       {dataList.length && status === 'ready' ? (
         <StyledList>
           {dataList.map(client =>
