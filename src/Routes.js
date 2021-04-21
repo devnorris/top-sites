@@ -3,19 +3,22 @@ import { Route, Switch } from 'react-router-dom';
 
 import Client from './Components/Client';
 import Home from './Components/Home';
-import SiteList from './Components/SiteList';
-import { SiteListProvider } from './Contexts/siteListContext';
+import DataList from './Components/DataList';
+import { DataListProvider } from './Contexts/dataListContext';
 
 const Routes = () => {
   return (
     <div>
       <Switch>
-        <Route path="/sites/:client" render={props => <Client {...props} />} />
-        <Route path="/sites">
-          <SiteListProvider>
-            <SiteList />
-          </SiteListProvider>
-        </Route>
+        <Route path="/:list/:client" render={props => <Client {...props} />} />
+        <Route
+          path="/:list"
+          render={({ match: { params } }) => (
+            <DataListProvider listType={params.list}>
+              <DataList path={params.list} />
+            </DataListProvider>
+          )}
+        />
         <Route path="/">
           <Home />
         </Route>

@@ -32,18 +32,16 @@ const Nav = styled.nav`
   }
 `;
 
-const NavBar = ({ goBack = false, title = '' }) => {
+const NavBar = ({ title = '' }) => {
   const history = useHistory();
   return (
     <div>
       <Nav>
-        {goBack && (
-          <button onClick={() => history.goBack()}>
-            <ArrowBackIosIcon
-              style={{ color: 'white', backgroundColor: '#45555c' }}
-            />
-          </button>
-        )}
+        <button onClick={() => history.goBack()}>
+          <ArrowBackIosIcon
+            style={{ color: 'white', backgroundColor: '#45555c' }}
+          />
+        </button>
         <h2>{title}</h2>
       </Nav>
     </div>
